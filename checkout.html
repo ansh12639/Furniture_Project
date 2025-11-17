@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout | Elegant Furniture</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 40px 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background-color: #fff;
+      padding: 40px 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 15px;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .pay-instructions,
+    .note,
+    .success-msg {
+      font-size: 16px;
+      margin: 15px 0;
+      color: #555;
+    }
+
+    .qr-code img {
+      width: 100%;
+      max-width: 260px;
+      margin-top: 20px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .amount {
+      font-size: 20px;
+      font-weight: bold;
+      color: #222;
+      margin-top: 20px;
+    }
+
+    .confirm-button {
+      padding: 14px 30px;
+      font-size: 18px;
+      margin-top: 30px;
+      background-color: transparent;
+      color: #333;
+      border: 2px solid #333;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .confirm-button:active {
+      transform: scale(0.98);
+    }
+
+    .confirm-button:hover {
+      background-color: #111;
+      color: white;
+    }
+
+    .error-message {
+      color: #d32f2f;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+    .loading-message {
+      color: #555;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Complete Your Payment</h1>
+    <p class="pay-instructions">Scan the QR code below using Google Pay or any UPI app to complete your payment.</p>
+
+    <div class="qr-code">
+      <img id="qr-code-img" alt="UPI Payment QR Code" style="display: none;" />
+      <p id="loading-message" class="loading-message">Loading payment details...</p>
+    </div>
+
+    <p class="amount">Amount: <span id="amount">Rs 0</span></p>
+
+    <p class="note">Please include your name or order ID in the payment note.</p>
+
+    <div class="success-msg">
+      After payment, your order will be confirmed via email or phone.
+    </div>
+
+    <form action="checkout.php" method="POST" class="d-inline">
+      <input type="hidden" id="form-product_id" name="product_id">
+      <input type="hidden" id="form-quantity" name="quantity">
+      <input type="hidden" id="form-total" name="total">
+      <button type="submit" class="confirm-button" disabled>Confirm Order</button>
+    </form>
+
+    <div id="error-message" class="error-message" style="display: none;"></div>
+  </div>
+
+  <script>
+    // Read URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('product_id');
+    const quantity = parseInt(urlParams.get('quantity')) || 1;
+
+    // Function to encode UPI deep link for QR code
+    function generateUPIDeepLink(amount, orderId) {
+      const upiId = "merchant@upi"; // Replace with your actual UPI ID
+      const payeeName = "Elegant Furniture";
+      const currency = "INR";
+      const transactionNote = `Order-${orderId || 'Checkout'}`;
+      
+      return `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=${currency}&tn=${encodeURIComponent(transactionNote)}`;
+    }
+
+    // Function to generate QRickit API URL
+    function generateQRCodeURL(data) {
+      const baseUrl = "https://qrickit.com/api/qr.php";
+      const params = new URLSearchParams({
+      d: data,
+      qrsize: 250,
+      e: "m",
+      fgcolor: "000000",
+      bgcolor: "FFFFFF"
+      });
+      return `${baseUrl}?${params.toString()}`;
+    }
+
+    // Center the QR code
+    const qrCodeContainer = document.querySelector('.qr-code');
+    qrCodeContainer.style.display = 'flex';
+    qrCodeContainer.style.justifyContent = 'center';
+    qrCodeContainer.style.alignItems = 'center';
+    qrCodeContainer.style.flexDirection = 'column';
+
+    // Function to show error and redirect
+    function showErrorAndRedirect(message) {
+      const errorDiv = document.getElementById('error-message');
+      errorDiv.innerText = message;
+      errorDiv.style.display = 'block';
+      setTimeout(() => {
+        window.location.href = "cart_onclick.php";
+      }, 2000);
+    }
+
+    // Validate parameters and fetch price
+    if (productId && quantity > 0) {
+      console.log('Parameters:', { productId, quantity });
+
+      // Fetch product price via AJAX
+      fetch(`get_product_price.php?product_id=${encodeURIComponent(productId)}`)
+        .then(response => response.json())
+        .then(data => {
+          const loadingMessage = document.getElementById('loading-message');
+          const qrCodeImg = document.getElementById('qr-code-img');
+          const confirmButton = document.querySelector('.confirm-button');
+
+          if (data.success) {
+            const price = data.price;
+            const total = (price * quantity).toFixed(2);
+
+            // Update visible details
+            document.getElementById('amount').innerText = `Rs ${total}`;
+
+            // Update hidden form fields
+            document.getElementById('form-product_id').value = productId;
+            document.getElementById('form-quantity').value = quantity;
+            document.getElementById('form-total').value = total;
+
+            // Generate UPI deep link with amount
+            const upiLink = generateUPIDeepLink(total, productId);
+
+            // Set QR code image source
+            qrCodeImg.src = generateQRCodeURL(upiLink);
+            qrCodeImg.style.display = 'block';
+
+            // Hide loading message and enable confirm button
+            loadingMessage.style.display = 'none';
+            confirmButton.disabled = false;
+
+          } else {
+            showErrorAndRedirect('Product not found. Redirecting to cart...');
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching price:', error);
+          showErrorAndRedirect('Failed to load payment details. Redirecting to cart...');
+        });
+
+    } else {
+      showErrorAndRedirect('Invalid product details. Redirecting to cart...');
+    }
+  </script>
+</body>
+
+</html>
