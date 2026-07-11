@@ -1,7 +1,5 @@
-CREATE DATABASE IF NOT EXISTS `furniture_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `furniture_db`;
-
 -- --------------------------------------------------------
+
 -- Table: users
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `users` (
