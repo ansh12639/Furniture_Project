@@ -2,7 +2,7 @@
 session_start();
 require_once 'db_connection.php';
 
-if (!isset($_SESSION['user_id']) || !isset($_SESSION['username'])) {
+if (!isset($_SESSION['id']) || !isset($_SESSION['username'])) {
     echo json_encode(['success' => false, 'message' => 'Please log in']);
     exit;
 }

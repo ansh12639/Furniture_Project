@@ -1,6 +1,6 @@
 <?php
 session_start(); // Required to access session variables
-include 'C:\xampp\htdocs\Furniture_Project\db_connection.php';
+include __DIR__ . '/db_connection.php';
 
 // Retrieve form inputs safely
 $username = $_POST['your_name'] ?? '';

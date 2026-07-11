@@ -1,5 +1,5 @@
-<?php
-include 'C:\xampp\htdocs\Furniture_Project\db_connection.php';
+﻿<?php
+include __DIR__ . '/../db_connection.php';
 
 $id = $_GET['order_id'] ?? '';
 

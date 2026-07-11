@@ -1,5 +1,5 @@
-<?php
-include 'C:\xampp\htdocs\Furniture_Project\db_connection.php';
+﻿<?php
+include __DIR__ . '/../db_connection.php';
 session_start(); // Required to read session message
 
 // Check if the database connection is successful

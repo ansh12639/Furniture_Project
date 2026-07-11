@@ -1,5 +1,5 @@
-<?php
-include 'C:\xampp\htdocs\Furniture_Project\db_connection.php';
+﻿<?php
+include __DIR__ . '/../db_connection.php';
 
 // SQL to get monthly sales summary
 $sql = "SELECT 

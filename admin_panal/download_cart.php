@@ -1,5 +1,5 @@
-<?php
-include 'C:\xampp\htdocs\Furniture_Project\db_connection.php';
+﻿<?php
+include __DIR__ . '/../db_connection.php';
 
 if (isset($_POST['table_name'])) {
     $table = mysqli_real_escape_string($conn, $_POST['table_name']);

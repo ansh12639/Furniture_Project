@@ -14,8 +14,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];
     $productId = $_POST['product_id'] ?? null;
 
-    if (!$productId || !in_array($action, ['remove', 'payment'])) {
+    if (!$productId || !in_array($action, ['remove', 'payment', 'update'])) {
         echo json_encode(['status' => 'error', 'message' => 'Invalid request']);
+        exit();
+    }
+
+    if ($action === 'update') {
+        $quantity = (int)($_POST['quantity'] ?? 1);
+        if ($quantity < 1) {
+            echo json_encode(['status' => 'error', 'message' => 'Invalid quantity']);
+            exit();
+        }
+        // Fetch current product price
+        $priceStmt = $conn->prepare("SELECT price FROM `products` WHERE `id` = ?");
+        $priceStmt->bind_param("i", $productId);
+        $priceStmt->execute();
+        $priceRow = $priceStmt->get_result()->fetch_assoc();
+        $priceStmt->close();
+        if (!$priceRow) {
+            echo json_encode(['status' => 'error', 'message' => 'Product not found']);
+            exit();
+        }
+        $newTotal = $quantity * $priceRow['price'];
+        $stmt = $conn->prepare("UPDATE `$tableName` SET `quantity` = ?, `total_price` = ? WHERE `product_id` = ?");
+        $stmt->bind_param("idi", $quantity, $newTotal, $productId);
+        if ($stmt->execute()) {
+            echo json_encode(['status' => 'success', 'message' => 'Cart updated', 'new_total' => $newTotal]);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to update cart']);
+        }
+        $stmt->close();
         exit();
     }
 
@@ -30,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     }
     exit();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -182,8 +211,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
       <nav>
         <ul class="nav-links">
           <li><a href="index.php">Home</a></li>
-          <li><a href="/Furniture_Project/index.php#category">Categories</a></li>
-          <li><a href="/Furniture_Project/index.php#images">Products</a></li>
+          <li><a href="index.php#category">Categories</a></li>
+          <li><a href="index.php#images">Products</a></li>
           <li><a href="aboutUs.php">About</a></li>
           <li><a href="contactUs.php">Contact</a></li>
           <li><a href="dashboard.php"><i class="fa-solid fa-user"></i> <?= $username ?></a></li>

@@ -1,5 +1,10 @@
 <?php
-include 'C:\xampp\htdocs\Furniture_Project\db_connection.php';
+session_start();
+if (!isset($_SESSION['username'])) {
+    header("Location: admin_login.php");
+    exit();
+}
+include __DIR__ . '/../db_connection.php';
 
 
 // Count total cart items across all user cart tables

@@ -14,7 +14,7 @@ $updateSuccess = false;
 
 // Fetch user details
 try {
-    $stmt = $conn->prepare("SELECT `username`, `email`, `phone`, `address`, `created_at` FROM `users` WHERE `username` = ?");
+    $stmt = $conn->prepare("SELECT `id`, `username`, `email`, `phone`, `address`, `created_at` FROM `users` WHERE `username` = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();

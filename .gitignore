@@ -1,0 +1,40 @@
+# IDE / Editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# MySQL raw data files (only init.sql should be tracked)
+database/furniture_db/
+
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# PHP uploads (runtime generated, not source)
+uploads/*.pdf
+uploads/*.png
+uploads/*.jpg
+uploads/*.jpeg
+uploads/*.gif
+
+# Logs
+*.log
+php_errors.log
+
+# Docker runtime
+.docker/
+
+# Environment / secrets
+.env
+.env.local
+.env.production
+
+# Node (if any tooling added later)
+node_modules/
+
+# Compiled / build
+*.min.js.map
+*.min.css.map

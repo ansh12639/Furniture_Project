@@ -77,7 +77,7 @@ if ($checkResult->num_rows > 0) {
     $newQuantity = $existing['quantity'] + $quantity;
     $newTotal = $product['price'] * $newQuantity;
 
-    $updateSQL = "UPDATE `$tableName` SET `quantity` = ?, `total` = ? WHERE `product_id` = ?";
+    $updateSQL = "UPDATE `$tableName` SET `quantity` = ?, `total_price` = ? WHERE `product_id` = ?";
     $updateStmt = $conn->prepare($updateSQL);
     $updateStmt->bind_param("idi", $newQuantity, $newTotal, $productId);
     $updateStmt->execute();

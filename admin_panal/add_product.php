@@ -1,5 +1,5 @@
-<?php
-include 'C:\xampp\htdocs\Furniture_Project\db_connection.php'; // Include your database connection file
+﻿<?php
+include __DIR__ . '/../db_connection.php'; // Include your database connection file
 
 if (isset($_POST['add'])) {
     $name = $_POST['product_name'];

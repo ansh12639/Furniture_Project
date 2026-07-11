@@ -1,5 +1,5 @@
-<?php
-include 'C:\xampp\htdocs\Furniture_Project\db_connection.php';
+﻿<?php
+include __DIR__ . '/../db_connection.php';
 session_start(); // Required to read session message
 
 // Fetch job applications along with user ID (or username/email if preferred)

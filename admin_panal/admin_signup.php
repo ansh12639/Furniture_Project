@@ -1,6 +1,6 @@
-<?php
+﻿<?php
 session_start();
-include 'C:\xampp\htdocs\Furniture_Project\db_connection.php';
+include __DIR__ . '/../db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = trim($_POST['username']);

@@ -59,7 +59,7 @@ $username = $_SESSION['username'];
       <a href="index.php">🛋️ Browse Furniture</a>
       <a href="orders.php">📦 Your Orders</a>
       <a href="profile.php">👤 Profile</a>
-      <a href="http://localhost/Furniture_Project/admin_panal/admin_login.php">🔧 Admin Panel</a> <!-- Add Admin Panel link here -->
+      <a href="admin_panal/admin_login.php">🔧 Admin Panel</a> <!-- Add Admin Panel link here -->
       <a href="logout.php" class="logout">🚪 Logout</a>
     </div>
   </div>

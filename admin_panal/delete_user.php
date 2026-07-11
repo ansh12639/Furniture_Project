@@ -1,5 +1,5 @@
-<?php
-include 'C:\xampp\htdocs\Furniture_Project\db_connection.php'; // Include your database connection file
+﻿<?php
+include __DIR__ . '/../db_connection.php'; // Include your database connection file
 
 // Get the user ID safely
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;

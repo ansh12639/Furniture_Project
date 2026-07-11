@@ -1,5 +1,5 @@
-<?php
-include 'C:\xampp\htdocs\Furniture_Project\db_connection.php';
+﻿<?php
+include __DIR__ . '/../db_connection.php';
 
 // Handle delete
 if (isset($_POST['delete_product_id']) && isset($_POST['table_name'])) {

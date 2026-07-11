@@ -38,8 +38,8 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '';
       <nav>
         <ul class="nav-links">
           <li><a href="index.php">Home</a></li>
-          <li><a href="/Furniture_Project/index.php#categories">Categories</a></li>
-          <li><a href="/Furniture_Project/index.php#images">Products</a></li>
+          <li><a href="index.php#category">Categories</a></li>
+          <li><a href="index.php#images">Products</a></li>
           <li><a href="aboutUs.php">About</a></li>
           <li><a href="contactUs.php">Contact</a></li>
           <?php if ($username): ?>

@@ -1,6 +1,6 @@
-<?php
+﻿<?php
 session_start();
-include 'C:\xampp\htdocs\Furniture_Project\db_connection.php'; // Include your database connection file
+include __DIR__ . '/../db_connection.php'; // Include your database connection file
 
 // ⭐⭐⭐ Handle form submission ⭐⭐⭐
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
