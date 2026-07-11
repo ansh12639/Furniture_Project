@@ -119,7 +119,7 @@ function showToast(message) {
 
 if (productId) {
   showLoading();
-  fetch(`detailsPage.php?id=${productId}`)
+  fetch(`DetailsPage.php?id=${productId}`)
     .then((response) => response.json())
     .then((data) => {
       if (!data.error) {

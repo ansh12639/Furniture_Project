@@ -40,15 +40,39 @@ function addToBag(feutureItemid) {
   cartCount();
 }
 
-// function cartCount() {
-//   let cartCountElement = document.querySelector(".cartcount");
-//   if (bagItems.length > 0) {
-//     cartCountElement.style.visibility = "visible";
-//     cartCountElement.innerText = bagItems.length;
-//   } else {
-//     cartCountElement.style.visibility = "hidden";
-//   }
-// }
+function cartCount() {
+  let cartCountElement = document.querySelector(".cartcount");
+  if (!cartCountElement) return;
+
+  fetch('get_cart_count.php')
+    .then(response => response.json())
+    .then(data => {
+      // If server returns a valid count (user is logged in), use it
+      if (data && typeof data.count !== 'undefined') {
+        cartCountElement.style.visibility = data.count > 0 ? "visible" : "hidden";
+        cartCountElement.innerText = data.count;
+      } else {
+        // Fallback to local storage
+        if (bagItems && bagItems.length > 0) {
+          cartCountElement.style.visibility = "visible";
+          cartCountElement.innerText = bagItems.length;
+        } else {
+          cartCountElement.style.visibility = "hidden";
+        }
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching cart count:', error);
+      // Fallback on error
+      if (bagItems && bagItems.length > 0) {
+        cartCountElement.style.visibility = "visible";
+        cartCountElement.innerText = bagItems.length;
+      } else {
+        cartCountElement.style.visibility = "hidden";
+      }
+    });
+}
+
 
 function displayFeutureItems() {
   let feutureItemsContainer = document.querySelector(

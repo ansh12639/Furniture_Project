@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Fetch product details when the page loads
-  fetch(`detailsPage.php?id=${productId}`)
+  fetch(`DetailsPage.php?id=${productId}`)
     .then((res) => res.json())
     .then((item) => {
       let quantity = 1;
