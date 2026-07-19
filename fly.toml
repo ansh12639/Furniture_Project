@@ -1,0 +1,29 @@
+# fly.toml - Fly.io deployment configuration
+app = "furniture-project-ansh"
+primary_region = "sin"  # Singapore — closest to India
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  DB_HOST = ""       # Will be set from Fly secrets
+  DB_USER = ""       # Will be set from Fly secrets
+  DB_NAME = "furniture_db"
+  DB_PORT = "3306"
+
+[http_service]
+  internal_port = 80
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [http_service.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1

@@ -1,7 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+ini_set('display_errors', 0);
+error_reporting(0);
 
 include "db_connection.php";
 
@@ -40,11 +39,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $stmtCheck->close();
 
+    // Hash password
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
     // Insert user into database
     try {
         $sql = "INSERT INTO `users` (`username`, `email`, `password`) VALUES (?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sss", $username, $email, $password);
+        $stmt->bind_param("sss", $username, $email, $hashed_password);
 
         if ($stmt->execute()) {
             $stmt->close();

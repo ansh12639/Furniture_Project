@@ -1,0 +1,61 @@
+============================================================
+  INFINITYFREE SETUP INSTRUCTIONS
+  Elegant Furniture Project
+============================================================
+
+STEP 1 — Create InfinityFree Account
+--------------------------------------
+1. Go to https://infinityfree.net
+2. Register and create a hosting account
+3. Choose a subdomain (e.g. furnitureshop → furnitureshop.infinityfree.net)
+
+STEP 2 — Create MySQL Database
+--------------------------------
+1. In InfinityFree control panel, go to "MySQL Databases"
+2. Create a new database (name it: furniture_db or similar)
+3. Create a MySQL user and set a password
+4. Note down:
+   - DB Host: usually sql200.infinityfree.com or similar
+   - DB Name: epiz_XXXXXXX_furniture_db
+   - DB User: epiz_XXXXXXX
+   - DB Password: (what you set)
+
+STEP 3 — Update db_connection.php
+-----------------------------------
+Edit the file db_connection.php and update lines 3-7:
+
+  $host = "sql200.infinityfree.com"; // ← your actual host
+  $user = "epiz_XXXXXXX";            // ← your MySQL username
+  $pass = "YourPassword";            // ← your MySQL password
+  $db   = "epiz_XXXXXXX_furniture";  // ← your database name
+  $port = 3306;
+
+STEP 4 — Import the Database
+-------------------------------
+1. In InfinityFree control panel, go to "phpMyAdmin"
+2. Select your database on the left
+3. Click the "Import" tab
+4. Choose the file: database/init.sql
+5. Click "Go" — this creates all tables and adds 171 products
+
+STEP 5 — Upload Files via File Manager
+----------------------------------------
+Option A (easier): Use InfinityFree File Manager
+  1. In control panel, go to "File Manager"
+  2. Open the "htdocs" folder
+  3. Upload all project files (select all, upload)
+
+Option B: Use FTP client (FileZilla)
+  1. Download FileZilla: https://filezilla-project.org/
+  2. Connect with your FTP credentials from InfinityFree
+  3. Upload everything to the /htdocs/ folder
+
+STEP 6 — Done! 🎉
+-------------------
+Visit your site at: http://yoursubdomain.infinityfree.net
+
+Login credentials (already in the database):
+  Admin:     admin / admin123
+  Test User: ansh1 / password123
+
+============================================================

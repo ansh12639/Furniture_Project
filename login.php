@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
 
-    if($user && $password == $user['password']) {
+    if($user && ($password === $user['password'] || password_verify($password, $user['password']))) {
         $_SESSION["id"] = $user["id"];
         $_SESSION["username"] = $user["username"];
         $_SESSION["email"] = $user["email"]; // ✅ Add this line to store the email

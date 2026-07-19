@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 session_start();
 include __DIR__ . '/../db_connection.php';// Database connection
 
@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $result->fetch_assoc();
 
     // Plain password comparison (NO HASHING)
-    if ($user && $password == $user['password']) { 
+    if ($user && ($password === $user['password'] || password_verify($password, $user['password']))) { 
         $_SESSION["id"] = $user["id"];
         $_SESSION["username"] = $user["username"];
 
