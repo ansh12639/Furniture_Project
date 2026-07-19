@@ -22,30 +22,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Check if username or email already exists
-    $checkQuery = "SELECT * FROM `users` WHERE `username` = ?";
+    $checkQuery = "SELECT `username`, `email` FROM `users` WHERE `username` = ? OR `email` = ?";
     $stmtCheck = $conn->prepare($checkQuery);
-    $stmtCheck->bind_param("s", $username);
+    $stmtCheck->bind_param("ss", $username, $email);
     $stmtCheck->execute();
     $result = $stmtCheck->get_result();
 
     if ($result->num_rows > 0) {
-        header("Location: signup.html?error=username_exists");
-        // "Username already exists. <a href='signup.html'>Try again</a>";
+        $existing = $result->fetch_assoc();
+        if ($existing['username'] === $username) {
+            header("Location: signup.html?error=username_exists");
+        } else {
+            header("Location: signup.html?error=email_exists");
+        }
+        $stmtCheck->close();
         exit();
     }
+    $stmtCheck->close();
 
     // Insert user into database
-    $sql = "INSERT INTO `users` (`username`, `email`, `password`) VALUES (?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sss", $username, $email, $password);
+    try {
+        $sql = "INSERT INTO `users` (`username`, `email`, `password`) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sss", $username, $email, $password);
 
-    if ($stmt->execute()) {
-        // echo "Registration successful! <a href='login.html'>Login now</a>";
-        header("Location: login.html?success=registration_successful");
-        exit();
-    } else {
-        // echo "Something went wrong: " . $stmt->error;
+        if ($stmt->execute()) {
+            $stmt->close();
+            header("Location: login.html?success=registration_successful");
+            exit();
+        } else {
+            $stmt->close();
+            header("Location: signup.html?error=registration_failed");
+            exit();
+        }
+    } catch (Exception $e) {
+        error_log("Signup error: " . $e->getMessage());
         header("Location: signup.html?error=registration_failed");
+        exit();
     }
 }
 ?>

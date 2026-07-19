@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
       message = "Passwords do not match.";
     } else if (errorParam === "username_exists") {
       message = "Username already exists.";
+    } else if (errorParam === "email_exists") {
+      message = "Email address already registered.";
     } else if (errorParam === "registration_failed") {
       message = "Registration failed. Please try again.";
     }
