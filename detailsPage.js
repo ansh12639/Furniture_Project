@@ -128,8 +128,9 @@ if (productId) {
         showError("Product not found.");
       }
     })
-    .catch(() => {
-      showError("Failed to load product details.");
+    .catch((error) => {
+      showError("Failed to load product details: " + error);
+      console.error("Failed to load product details:", error);
     });
 } else {
   showError("Product ID is missing.");
