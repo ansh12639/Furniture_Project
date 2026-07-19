@@ -160,7 +160,7 @@ $username = $loggedIn ? $_SESSION['username'] : null;
 <script src="items.js"></script>
 <script src="script.js"></script>
 <script src="search_Results.js"></script>
-<script src="detailsPage.js"></script>
+<script src="detailsPage.js?v=2"></script>
 <script src="products.js"></script>
 <script src="search.js"></script>
 
